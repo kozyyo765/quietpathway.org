@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiet Pathway — The Catholic Faith</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FAF8F4;
+    --charcoal: #1A1A1A;
+    --soft-black: #0D0D0D;
+    --gold: #C4A35A;
+    --gold-light: #D4B978;
+    --muted-gold: #8B7355;
+    --card-bg: rgba(15, 15, 15, 0.82);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    color: var(--cream);
+    background: var(--soft-black);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--soft-black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* Navigation */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1.2rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    transition: background 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  nav.menu-open {
+    background: rgba(13,13,13,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  nav .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  nav .menu {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  nav .menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--cream);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  nav .menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  nav .menu a:hover {
+    opacity: 1;
+    color: var(--gold);
+  }
+  nav .menu a:hover::after { width: 100%; }
+
+  /* Mobile Menu */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+  .menu-toggle span {
+    width: 24px; height: 1px;
+    background: var(--gold);
+    transition: all 0.3s ease;
+  }
+
+  /* Section Base */
+  .section {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .section-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.3) saturate(0.6);
+    transition: transform 8s ease, filter 1s ease;
+  }
+  .section:hover .section-bg {
+    transform: scale(1.03);
+    filter: brightness(0.35) saturate(0.7);
+  }
+  .section-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(13,13,13,0.5) 0%,
+      rgba(13,13,13,0.7) 50%,
+      rgba(13,13,13,0.85) 100%
+    );
+  }
+  .section-content {
+    position: relative;
+    z-index: 2;
+    max-width: 920px;
+    padding: 7rem 2.5rem 5rem;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 1.2s ease forwards;
+  }
+  .section:nth-child(even) .section-content {
+    animation-delay: 0.2s;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Typography */
+  .section-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+  }
+  .section-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold-light);
+  }
+  .section-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.8);
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Scripture & Quote Blocks — NO ITALIC, clean serif */
+  .scripture-block, .father-quote {
+    background: var(--card-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(196,163,90,0.12);
+    border-left: 3px solid var(--gold);
+    padding: 2.2rem 2.8rem;
+    margin: 2.5rem auto;
+    max-width: 780px;
+    text-align: left;
+    position: relative;
+    transition: all 0.4s ease;
+    border-radius: 2px;
+  }
+  .scripture-block:hover, .father-quote:hover {
+    border-left-color: var(--gold-light);
+    background: rgba(18, 18, 18, 0.88);
+    transform: translateX(4px);
+  }
+  .scripture-block::before, .father-quote::before {
+    content: '"';
+    position: absolute;
+    top: -0.3rem; left: 1.8rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    color: var(--gold);
+    opacity: 0.25;
+    line-height: 1;
+  }
+  .scripture-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.85;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+  }
+  .scripture-ref {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: right;
+  }
+  .father-quote .quote-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: rgba(245,240,232,0.9);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+  }
+  .father-quote .quote-author {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-gold);
+    text-align: right;
+  }
+
+  /* Body Text */
+  .body-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.85);
+    max-width: 720px;
+    margin: 1.5rem auto;
+    text-align: left;
+  }
+  .body-text p { margin-bottom: 1.5rem; }
+  .body-text strong {
+    color: var(--gold-light);
+    font-weight: 500;
+  }
+
+  /* Divider */
+  .divider {
+    width: 50px;
+    height: 1px;
+    background: var(--gold);
+    margin: 3rem auto;
+    opacity: 0.4;
+  }
+
+  /* Scroll Indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.6;
+    animation: bounce 2.5s infinite;
+  }
+  .scroll-indicator span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .scroll-indicator .line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* Hero Special */
+  .hero .section-title {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+  .hero .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .hero .verse-hero {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.2rem;
+    color: rgba(245,240,232,0.7);
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--soft-black);
+    padding: 4rem 2.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(196,163,90,0.1);
+  }
+  footer .footer-verse {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.05rem;
+    color: rgba(245,240,232,0.6);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+  }
+  footer .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  footer .footer-text {
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.1em;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    nav .menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #0D0D0D;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    nav .menu.active { display: flex; }
+    nav .menu li {
+      background: #0D0D0D;
+      width: 100%;
+      text-align: center;
+    }
+    nav .menu a {
+      display: block;
+      font-size: 1.1rem;
+      opacity: 0.9;
+      padding: 1.2rem 0;
+      letter-spacing: 0.08em;
+    }
+    nav .menu a { font-size: 1.1rem; opacity: 0.9; }
+    .menu-toggle { display: flex; }
+    .section-content { padding: 5rem 1.5rem 4rem; }
+    .scripture-block, .father-quote { padding: 1.8rem 1.5rem; }
+    .scripture-block::before, .father-quote::before { left: 1.2rem; }
+  }
+
+  /* Intersection Observer Animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="logo">Quiet Pathway</div>
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <ul class="menu" id="menu">
+    <li><a href="#hero" onclick="closeMenu()">Home</a></li>
+    <li><a href="#jesus" onclick="closeMenu()">Who is Jesus?</a></li>
+    <li><a href="#mary" onclick="closeMenu()">Who is Mary?</a></li>
+    <li><a href="#eucharist" onclick="closeMenu()">What is the Eucharist?</a></li>
+    <li><a href="#church" onclick="closeMenu()">What is the Church?</a></li>
+    <li><a href="#pope" onclick="closeMenu()">Why Follow the Pope?</a></li>
+    <li><a href="#fathers" onclick="closeMenu()">Who are the Church Fathers?</a></li>
+    <li><a href="#why" onclick="closeMenu()">Why Be Catholic?</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="section hero" id="hero">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/9b62a5ee4fc0e6b89eee51109c984e18cdfea92d.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="tagline">quietpathway.org</span>
+    <h1 class="section-title">The Catholic<br><em>Faith</em></h1>
+    <p class="section-subtitle">An ancient path, illuminated by sacred Scripture and the witness of the saints, leading to the fullness of truth in Jesus Christ.</p>
+    <p class="verse-hero">"I am the way, the truth, and the life. No one comes to the Father except through me."<br>— John 14:6</p>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IS JESUS? -->
+<section class="section" id="jesus">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/116c2e6c82ce4f808f377be18c30bbef1f5af67c.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="section-number">I</span>
+    <h2 class="section-title">Who is <em>Jesus?</em></h2>
+    <p class="section-subtitle">The central question of human existence. The answer changes everything.</p>
+
+    <div class="body-text">
+      <p>Jesus Christ is not merely a great teacher, a moral philosopher, or a revolutionary figure in history. He is the Eternal Word made flesh, the Second Person of the Holy Trinity, who entered into time to redeem mankind from sin and death.</p>
+      <p>The Catholic Church professes that Jesus is <strong>fully God and fully man</strong> — consubstantial with the Father in His divinity, and consubstantial with us in His humanity, except for sin. This is the mystery of the Incarnation: the infinite God became a finite man, that finite man might share in the infinite life of God.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">In the beginning was the Word, and the Word was with God, and the Word was God. He was in the beginning with God. All things came to be through him, and without him nothing came to be. And the Word became flesh and made his dwelling among us, and we saw his glory, the glory as of the Father's only Son, full of grace and truth.</p>
+      <p class="scripture-ref">John 1:1-3, 14</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The Gospel of John opens with a deliberate echo of Genesis: "In the beginning." But where Genesis speaks of God creating through His word, John reveals that the Word is not merely an instrument of creation — the Word <em>is</em> God. The Greek "Logos" was a term familiar to both Jews (as the creative word of God in the Old Testament) and Greeks (as the rational principle of the universe). John declares that this divine Word, through whom all things were made, became flesh — "sarx" in Greek, meaning actual human flesh, not a phantom or illusion. The phrase "made his dwelling among us" translates "eskēnōsen," literally "tabernacled" — evoking the Tent of Meeting in the wilderness, where God's glory dwelt with Israel. Jesus is the new Tabernacle, the new Temple, the place where heaven and earth meet. The glory John speaks of is not merely human excellence but the Shekinah glory of God, now visible in the face of a man. This is the foundation of the Catholic doctrine of the Incarnation: Jesus is not a man who became God, but God who became man.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">Jesus said to them, "Amen, amen, I say to you, before Abraham came to be, I AM."</p>
+      <p class="scripture-ref">John 8:58</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> This is one of the most explosive claims in the entire New Testament. Jesus does not say "I was" before Abraham — He says "I AM" ("egō eimi" in Greek), the exact translation of the divine name revealed to Moses at the burning bush: "I AM WHO I AM" (Exodus 3:14, Hebrew "Ehyeh asher ehyeh"). The Jewish listeners understood exactly what Jesus was claiming. They picked up stones to stone Him for blasphemy (John 8:59). In Jewish law, blasphemy was punishable by death (Leviticus 24:16). The only reason they could charge Him with blasphemy is that He was claiming to be God. Jesus does not correct them. He does not say, "You misunderstand me." He lets the stones fly. This passage is devastating to any claim that Jesus was merely a prophet or teacher. A prophet who falsely claims to be God is not a good teacher — he is a blasphemer and a liar. The only options are the trilemma of C.S. Lewis: Jesus is either Lord, liar, or lunatic. The Catholic Church, following two thousand years of Christian witness, proclaims Him as Lord — true God and true man.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">God became man so that man might become God.</p>
+      <p class="quote-author">— St. Athanasius of Alexandria</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">For God so loved the world that he gave his only Son, so that everyone who believes in him might not perish but might have eternal life.</p>
+      <p class="scripture-ref">John 3:16</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The Greek word for "only" here is "monogenēs" — not merely "only" in the sense of uniqueness, but "only-begotten," sharing the same nature as the Father. This is the language of the Nicene Creed: "begotten, not made, consubstantial with the Father." The purpose of the Incarnation is not merely to teach us morality or to set an example, but to give us eternal life — "zōēn aiōnion" — a share in the very life of God. The Catholic faith is not a philosophy or an ethical system; it is a participation in divine life through union with Christ. This is why the sacraments are essential: they are the means by which Christ communicates His life to us. Baptism regenerates us. Confirmation strengthens us. The Eucharist nourishes us. Confession heals us. These are not symbols of grace; they are channels of grace, the very life of Christ flowing into the soul.</p>
+    </div>
+
+    <div class="body-text">
+      <p>To know Jesus is to know the Father. To love Jesus is to love the Father. To receive Jesus is to receive the Father. This is why the Catholic faith is not merely a set of doctrines or a moral code — it is a <strong>relationship with a Person</strong>, the Person of Jesus Christ, who is alive, present, and working in His Church until the end of time.</p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- WHO IS MARY? -->
+<section class="section" id="mary">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/cdn.kastatic.org/f4163650f01413ba8666691b1b3a8deebabcbdcd.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="section-number">II</span>
+    <h2 class="section-title">Who is <em>Mary?</em></h2>
+    <p class="section-subtitle">The Mother of God, the New Eve, the Ark of the New Covenant, and our spiritual mother.</p>
+
+    <div class="body-text">
+      <p>Mary is not a goddess. She is not divine. She is a creature, the greatest of all creatures, but a creature nonetheless. Yet she is the <strong>Mother of God</strong> — Theotokos, the God-bearer — because the Person she conceived and bore in her womb is the divine Son of God.</p>
+      <p>From the first moment of her conception, Mary was preserved from all stain of original sin by a singular grace and privilege of God, in view of the merits of Jesus Christ. This is the dogma of the Immaculate Conception. She was full of grace from the beginning, chosen before the foundation of the world to be the vessel of the Incarnation.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">Hail, full of grace! The Lord is with you.</p>
+      <p class="scripture-ref">Luke 1:28</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The Greek here is "kecharitōmenē" — a perfect passive participle, meaning "one who has been completely and perfectly graced." It is not merely "favored one" or "highly favored" as some translations render it. The perfect tense indicates a completed action with ongoing effects. Gabriel does not say Mary <em>will be</em> graced; he says she <em>has been</em> graced — completely, perfectly, from the first moment of her existence. The Vulgate translates this as "gratia plena" — "full of grace." This is why the Catholic Church has always understood this greeting as a declaration of Mary's unique holiness. She is not merely a pious woman who happened to be chosen; she is the one who, from her very conception, was preserved from all stain of sin and filled with the grace of God to prepare her for the unimaginable dignity of being the Mother of God.</p>
+    </div>
+
+    <div class="body-text">
+      <p>Mary is the <strong>New Eve</strong>. As Eve was the mother of all the living in the order of nature, Mary is the mother of all the living in the order of grace. Where Eve said "no" to God, Mary said "yes" — her fiat, her "let it be done to me according to your word," reversed the disobedience of Eden and opened the door to redemption.</p>
+      <p>She is the <strong>Ark of the New Covenant</strong>. Just as the Ark of the Old Covenant contained the tablets of the Law, the manna from heaven, and Aaron's rod, Mary contained the Word made flesh, the Bread of Life, and the High Priest of the New Covenant. When Elizabeth greeted her with the words "Who am I that the mother of my Lord should come to me?" she echoed David's words when the Ark entered Jerusalem.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">When Elizabeth heard Mary's greeting, the infant leaped in her womb, and Elizabeth, filled with the Holy Spirit, cried out in a loud voice and said, "Most blessed are you among women, and blessed is the fruit of your womb. And how does this happen to me, that the mother of my Lord should come to me?"</p>
+      <p class="scripture-ref">Luke 1:41-43</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The phrase "mother of my Lord" is profoundly significant. In the Old Testament, "Lord" ("Adonai") was the word Jews used to avoid pronouncing the sacred name YHWH. Elizabeth is not merely saying Mary is the mother of a great man or a prophet — she is calling her the mother of the divine Lord, the God of Israel. This is the scriptural foundation for the title "Theotokos" (Mother of God), which the Council of Ephesus (431 A.D.) dogmatically affirmed. To deny that Mary is the Mother of God is to deny that the Person born of her is God — which is the heresy of Nestorianism. The Catholic Church defends this title not to exalt Mary for her own sake, but to defend the truth of the Incarnation: the One born of Mary is truly God.</p>
+      <p>Notice also the parallel with 2 Samuel 6:9, where David says, "How can the ark of the Lord come to me?" when the Ark of the Covenant enters Jerusalem. Mary "arose and went in haste" to the hill country of Judah, just as David "arose and went" to bring the Ark to Jerusalem. Mary stayed in Elizabeth's house for "about three months," just as the Ark remained in the house of Obed-edom for three months. These parallels are not accidental; they are the inspired text of Scripture revealing Mary as the new Ark, the vessel that carries the presence of God.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">Him whom the heavens cannot contain, the womb of one woman bore… she carried Him in whom we are; she gave milk to our Bread.</p>
+      <p class="quote-author">— St. Augustine of Hippo</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">The Word himself, coming into the Blessed Virgin herself, assumed for himself his own temple from the substance of the Virgin and came forth from her a man in all that could be externally discerned, while interiorly he was true God. Therefore he kept his Mother a virgin even after her childbearing.</p>
+      <p class="quote-author">— St. Cyril of Alexandria</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">A great sign appeared in the sky, a woman clothed with the sun, with the moon under her feet, and on her head a crown of twelve stars.</p>
+      <p class="scripture-ref">Revelation 12:1</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The Book of Revelation is filled with symbolic imagery, but symbols in Scripture are not arbitrary — they point to real realities. The "woman clothed with the sun" is a multifaceted symbol: she represents Israel (the twelve tribes), the Church (the new Israel), and Mary (the mother of the Messiah). The Catholic Church has always understood this passage as referring to Mary in a special way. She is "clothed with the sun" — the glory of God surrounds her. The "moon under her feet" signifies her dominion over the changing things of this world. The "crown of twelve stars" connects her to the twelve tribes and the twelve apostles, the foundation of the Church. The fact that this woman is given a crown indicates her royal dignity and her queenship — not as a rival to Christ, but as the mother of the King, sharing in His glory. This is the scriptural basis for the Catholic doctrine of Mary's queenship and her Assumption into heaven, body and soul.</p>
+    </div>
+
+    <div class="body-text">
+      <p>Mary is our mother too. From the cross, Jesus looked at His mother and said, "Woman, behold your son." Then He looked at the beloved disciple — representing all believers — and said, "Behold your mother." In that moment, Mary was given to the Church as our spiritual mother. She intercedes for us, she prays for us, she leads us to her Son. The Catholic Church does not worship Mary; we honor her, we love her, and we ask for her prayers, just as we ask for the prayers of any saint — but with the confidence that her prayers are especially powerful, for she is the Mother of God.</p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- WHAT IS THE EUCHARIST? -->
+<section class="section" id="eucharist">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/www.italianrenaissance.org/615140a0d114940320f30fc805073cd1814a2d0d.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="section-number">III</span>
+    <h2 class="section-title">What is the <em>Eucharist?</em></h2>
+    <p class="section-subtitle">The source and summit of the Christian life. The Body, Blood, Soul, and Divinity of Jesus Christ.</p>
+
+    <div class="body-text">
+      <p>The Eucharist is not a symbol. It is not a metaphor. It is not a memorial meal in the Protestant sense. The Eucharist is the <strong>real presence</strong> of Jesus Christ — His true Body, true Blood, Soul, and Divinity — under the appearances of bread and wine. This is the central mystery of the Catholic faith, the greatest gift Christ left to His Church, and the fulfillment of His promise: "Behold, I am with you always, until the end of the age."</p>
+      <p>At the Last Supper, Jesus took bread, blessed it, broke it, and gave it to His disciples, saying, "This is my body, which will be given for you; do this in memory of me." He did not say, "This represents my body." He did not say, "This is like my body." He said, <strong>"This is my body."</strong> The same Greek verb — "estin" — is used in the Gospels when Jesus says, "I am the door," "I am the vine," "I am the good shepherd." He means what He says.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">While they were eating, he took bread, said the blessing, broke it, and gave it to them, and said, "Take it; this is my body." Then he took a cup, gave thanks, and gave it to them, and they all drank from it. He said to them, "This is my blood of the covenant, which will be shed for many."</p>
+      <p class="scripture-ref">Mark 14:22-24</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The Greek word for "is" here is "estin" — the simple present tense of the verb "to be." It is not "touto estin sēmainon" (this is a sign of) or "touto estin homoiōma" (this is like). It is "touto estin to sōma mou" — "this is my body." In every other instance where Jesus uses "I am" statements in the Gospels ("I am the bread of life," "I am the light of the world," "I am the resurrection"), He is speaking literally about His own identity. He is not saying He is <em>like</em> bread or <em>like</em> light — He is declaring what He <em>is</em>. The same applies here. Furthermore, the phrase "blood of the covenant" directly echoes Exodus 24:8, where Moses sprinkles the blood of the covenant on the people. Jesus is instituting a new covenant, sealed not with the blood of animals but with His own blood — and He is making that blood present in the cup before Him, even before the crucifixion. This is the sacramental anticipation of the cross, the making-present of the one eternal sacrifice.</p>
+    </div>
+
+    <div class="body-text">
+      <p>In the Gospel of John, chapter 6, Jesus makes this teaching even more explicit. He says, "I am the living bread that came down from heaven; whoever eats this bread will live forever; and the bread that I will give is my flesh for the life of the world." The Jews quarreled among themselves, saying, "How can this man give us his flesh to eat?" Jesus does not soften His teaching. He doubles down:</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">Amen, amen, I say to you, unless you eat the flesh of the Son of Man and drink his blood, you do not have life within you. Whoever eats my flesh and drinks my blood has eternal life, and I will raise him on the last day. For my flesh is true food, and my blood is true drink. Whoever eats my flesh and drinks my blood remains in me and I in him.</p>
+      <p class="scripture-ref">John 6:53-56</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> This is the most explicit Eucharistic teaching in the entire Bible, and it is devastating to any merely symbolic interpretation. The Greek word for "eat" in verse 53 is "phagēte" — but in verse 54, Jesus switches to "trogein," a much more graphic word meaning "to gnaw, to chew, to consume." It is the word used for animals eating. Jesus is deliberately using the most physical, literal language possible to describe eating His flesh. He does this four times in this passage. If He were speaking metaphorically, this would be the moment to clarify. Instead, He intensifies the literalism. The Jewish listeners understood Him literally — "How can this man give us his flesh to eat?" — and they were horrified. Jesus does not say, "You misunderstand; I am speaking spiritually." He lets them walk away. "As a result of this, many of his disciples returned to their former way of life and no longer accompanied him" (John 6:66). Jesus turns to the Twelve and asks, "Do you also want to leave?" Peter answers for all of us: "Master, to whom shall we go? You have the words of eternal life." The Catholic Church has never abandoned this literal understanding. The Eucharist is the true flesh and true blood of Christ.</p>
+      <p>Furthermore, the phrase "remains in me and I in him" is the language of mystical union, of real indwelling. This is not the language of a symbol. A symbol does not remain in you. You do not remain in a symbol. Only a real presence can produce this kind of mutual indwelling. St. Paul will later say, "The cup of blessing that we bless, is it not a participation in the blood of Christ? The bread that we break, is it not a participation in the body of Christ?" (1 Corinthians 10:16). The Greek word for "participation" is "koinōnia" — communion, fellowship, sharing. We do not merely remember Christ in the Eucharist; we participate in Him. We become one flesh with Him, as a bride with her bridegroom.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">For anyone who eats and drinks without discerning the body, eats and drinks judgment on himself. That is why many among you are ill and infirm, and a considerable number are dying.</p>
+      <p class="scripture-ref">1 Corinthians 11:29-30</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> St. Paul's warning is inexplicable if the Eucharist is merely a symbol. Why would eating ordinary bread and wine "unworthily" cause sickness and death? Paul is treating the Eucharist with the same gravity as the Old Testament treated the Ark of the Covenant — touch it unworthily, and you die (2 Samuel 6:6-7). The fact that physical consequences follow from unworthy reception proves that the Eucharist is not ordinary bread and wine. It is the real presence of Christ, and to receive it without faith, without repentance, without reverence is to commit sacrilege — to profane the body of the Lord. This is why the Catholic Church insists on the sacrament of Confession before receiving the Eucharist for those in mortal sin, and why she teaches that the Eucharist must be received with the utmost reverence and adoration.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">That bread which you see on the altar, having been sanctified by the word of God, is the body of Christ. That chalice, or rather, what is in that chalice, having been sanctified by the word of God, is the blood of Christ.</p>
+      <p class="quote-author">— St. Augustine of Hippo</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">For we do not receive these as common bread nor common drink; but since Jesus Christ our Savior was made incarnate by the word of God and had both flesh and blood for our salvation, so also we have been taught, the food which has been made into the Eucharist by the Eucharistic prayer set down by him, and by the change of which our blood and flesh is nourished, is the flesh and the blood of that incarnated Jesus.</p>
+      <p class="quote-author">— St. Justin Martyr, c. 155 A.D.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">Take care, then, to use one Eucharist; for there is only one Flesh of our Lord Jesus Christ and one cup of union with his Blood, one altar of sacrifice, as there is one bishop with the presbyters and my fellow-servants the deacons.</p>
+      <p class="quote-author">— St. Ignatius of Antioch, c. 110 A.D.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">Every day they devoted themselves to meeting together in the temple area and to breaking bread in their homes. They ate their meals with exultation and sincerity of heart, praising God and enjoying favor with all the people. And every day the Lord added to their number those who were being saved.</p>
+      <p class="scripture-ref">Acts 2:46-47</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The early Church "devoted themselves" to "breaking bread" — the Greek "klōntes artos" is the technical term for the Eucharist. They did this daily, not merely weekly. The Eucharist was the center of their communal life, the source of their joy, the engine of their growth. "And every day the Lord added to their number those who were being saved." The Eucharist is not a private devotion; it is the source of the Church's vitality and the sign of her unity. Where the Eucharist is celebrated, the Church is present. Where the Eucharist is absent, the Church is incomplete. This is why the Catholic Church insists on the necessity of the Eucharist for the fullness of Christian life and why she guards the Eucharist with such reverence and care.</p>
+    </div>
+
+    <div class="body-text">
+      <p>The Eucharist is the <strong>medicine of immortality</strong>, as St. Ignatius called it. It is the antidote against death, the pledge of our resurrection, the foretaste of heaven. In receiving Holy Communion, we are united to Christ in the most intimate way possible this side of eternity. We become what we receive: the Body of Christ.</p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- WHAT IS THE CHURCH? -->
+<section class="section" id="church">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/cdn.britannica.com/a1ac53daabd54d1b3a0b816388e9f52a7251c099.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="section-number">IV</span>
+    <h2 class="section-title">What is the <em>Church?</em></h2>
+    <p class="section-subtitle">The Mystical Body of Christ, the pillar and bulwark of the truth, the communion of saints.</p>
+
+    <div class="body-text">
+      <p>The Catholic Church is not a human institution, a political organization, or a social club. It is the <strong>Mystical Body of Christ</strong> — a living, supernatural reality, founded by Jesus Christ Himself, endowed with His authority, animated by His Spirit, and destined to endure until the end of time.</p>
+      <p>Jesus said, "You are Peter, and upon this rock I will build my church, and the gates of the netherworld shall not prevail against it." He promised that His Church would be indestructible, that the powers of hell would never overcome it. This is not because the Church is strong in herself, but because Christ is her head, her strength, her very life.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">And so I say to you, you are Peter, and upon this rock I will build my church, and the gates of the netherworld shall not prevail against it. I will give you the keys to the kingdom of heaven. Whatever you bind on earth shall be bound in heaven; and whatever you loose on earth shall be loosed in heaven.</p>
+      <p class="scripture-ref">Matthew 16:18-19</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> This is the foundational text of the Catholic doctrine of the papacy and the Church. The name "Peter" ("Petros" in Greek, "Kepha" in Aramaic) means "rock." Jesus deliberately changes Simon's name to Rock, just as He changed Abram's name to Abraham and Jacob's to Israel. Name changes in Scripture signify a new vocation, a new identity, a new mission. Peter is not merely a rock among many rocks; he is the rock on which Jesus builds His Church. The Greek makes this clear: "epi tautē tē petra" — "upon this rock." The word play between Petros (Peter) and petra (rock) is unmistakable in the original language. Jesus is building His Church on Peter, not on Peter's faith alone (as some Protestant interpretations suggest), but on Peter himself as the visible foundation.</p>
+      <p>The "keys of the kingdom of heaven" are a direct reference to Isaiah 22:22, where the key of the house of David is given to Eliakim, the chief steward, who governs the kingdom in the king's absence. The power to "bind and loose" was a rabbinic term for the authority to make decisions about doctrine and discipline — to declare what is permitted and what is forbidden. Jesus gives this authority not to the apostles collectively, but to Peter individually, before the other apostles are even mentioned. This is not a democratic authority shared equally; it is a singular authority given to Peter as the head of the apostles.</p>
+    </div>
+
+    <div class="body-text">
+      <p>The Church is <strong>one, holy, catholic, and apostolic</strong> — the four marks given to her by Christ. She is one because there is one Lord, one faith, one baptism. She is holy because Christ is holy, and He sanctifies His members. She is catholic — universal — because she is sent to all nations, to every people, to the ends of the earth. She is apostolic because she was founded on the apostles, preserves their teaching, and continues their mission through apostolic succession.</p>
+      <p>St. Paul calls the Church "the pillar and bulwark of the truth." This is not a compliment — it is a description of her nature. The Church does not merely possess the truth; she <strong>is</strong> the truth's bulwark, its defense, its guarantee. When the Church teaches definitively on matters of faith and morals, she teaches with the authority of Christ Himself.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">If I am delayed, you may know how one ought to behave in the household of God, which is the church of the living God, the pillar and bulwark of the truth.</p>
+      <p class="scripture-ref">1 Timothy 3:15</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The Greek word for "pillar" is "stylos" — a column that supports a building. The word for "bulwark" is "hedraiōma" — a foundation, a ground, a support. Paul is saying that the Church is not merely one place where truth can be found; she is the very structure that holds truth up. Without the Church, truth would collapse. This is why the Catholic Church teaches that she is necessary for salvation — not because God cannot save outside the Church, but because the Church is the ordinary means God has established, the visible sacrament of salvation, the place where the fullness of truth and grace is found. The Church is the "household of God" — "oikos theou" — the family of God, the domestic church, the place where God dwells among His people. This is not a metaphor; it is a reality. The Church is the continuation of the Incarnation — Christ present in the world through His members, His sacraments, and His teaching.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">Where the bishop is, there let the people be, just as where Jesus Christ is, there is the Catholic Church.</p>
+      <p class="quote-author">— St. Ignatius of Antioch, c. 110 A.D.</p>
+    </div>
+
+    <div class="body-text">
+      <p>The Church is the <strong>communion of saints</strong> — the living and the dead united in Christ. She is the Bride of Christ, spotless and beautiful, for whom Christ laid down His life. She is the sacrament of salvation, the means by which Christ continues to reach the world, to heal the broken, to forgive sins, to feed the hungry, to give sight to the blind, to raise the dead.</p>
+      <p>To be Catholic is not to join an organization. It is to be grafted into a living organism, to become a member of the Body of Christ, to share in His divine life through the sacraments, and to participate in His mission of redemption until He comes again in glory.</p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- WHY FOLLOW THE POPE? -->
+<section class="section" id="pope">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/news.artnet.com/9468e82df9979b79c6dd27dab05ba454d6eac617.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="section-number">V</span>
+    <h2 class="section-title">Why Follow the <em>Pope?</em></h2>
+    <p class="section-subtitle">The successor of St. Peter, the Vicar of Christ, the servant of the servants of God.</p>
+
+    <div class="body-text">
+      <p>The papacy is not a medieval invention. It is not a Roman power grab. It is the fulfillment of Christ's promise to St. Peter, the prince of the apostles, upon whom Jesus built His Church. When Jesus said, "You are Peter, and upon this rock I will build my church," He was not speaking of Peter's faith alone, or of Himself as the rock — He was speaking of Peter personally, as the visible foundation of the Church He was establishing.</p>
+      <p>Jesus gave Peter the <strong>keys of the kingdom of heaven</strong> — an image drawn from the Old Testament, where the key-bearer was the chief steward, the one who governed the house in the king's absence. Peter was given the authority to bind and loose, to teach and govern, to be the visible center of unity for the universal Church.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">I will give you the keys to the kingdom of heaven. Whatever you bind on earth shall be bound in heaven; and whatever you loose on earth shall be loosed in heaven.</p>
+      <p class="scripture-ref">Matthew 16:19</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The "keys of the kingdom" are a direct allusion to Isaiah 22:22, where God says to Eliakim, the chief steward of the house of David: "I will place the key of the House of David on his shoulder; what he opens, no one will shut; what he shuts, no one will open." In the Davidic kingdom, the chief steward held the keys because the king was often absent, leading armies or governing distant territories. The steward's authority was the king's authority, delegated and real. Jesus, the Son of David, is establishing a new kingdom — the kingdom of heaven — and He appoints Peter as His chief steward. The authority to "bind and loose" was the rabbinic power to make doctrinal and disciplinary decisions — to declare what is permitted and what is forbidden. Jesus gives this authority not to the apostles collectively, but to Peter individually, before the other apostles are mentioned. The singular "you" ("soi" in Greek) is directed at Peter, not at the group. This is the scriptural foundation of the papacy: Peter is the visible head of the Church, and his successors, the bishops of Rome, inherit his office and authority.</p>
+    </div>
+
+    <div class="body-text">
+      <p>After the Resurrection, Jesus confirmed Peter's primacy by asking him three times, "Do you love me?" and commanding him, "Feed my sheep." This was a restoration of Peter after his threefold denial, and a commission to shepherd the entire flock — not just the sheep of Judea, but all the sheep of Christ throughout the world.</p>
+      <p>St. Peter went to Rome, where he was martyred under Nero. His tomb lies beneath the high altar of St. Peter's Basilica. His successors, the bishops of Rome, have inherited his office, his authority, and his responsibility. This is the papacy: not a tyranny, but a service; not a claim to personal greatness, but a stewardship of Christ's flock.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">He said to him the third time, "Simon, son of John, do you love me?" Peter was distressed that he had said to him a third time, "Do you love me?" and he said to him, "Lord, you know everything; you know that I love you." Jesus said to him, "Feed my sheep."</p>
+      <p class="scripture-ref">John 21:17</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> The triple question corresponds to Peter's triple denial, restoring him to his office after his fall. But notice the progression: the first two times, Jesus asks "Do you love me?" using "agapas" (the highest form of love), and Peter answers with "phileō" (friendship love). The third time, Jesus meets Peter where he is and asks, "Do you love me?" using "phileis" — Peter's own word. This is Christ's mercy: He accepts our love as it is, and transforms it into what it should be. The command "Feed my sheep" is not a suggestion; it is an imperative. The Greek "poimaine" means "to shepherd, to tend, to rule." Jesus is giving Peter the authority and duty to govern the entire Church. The word "my" is emphatic: these are Christ's sheep, not Peter's. The Pope is not the owner of the Church; he is the shepherd, the servant of the servants of God, the one who feeds Christ's flock with Christ's own food — the Eucharist, the Word, the sacraments.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">Peter, the foundation of the Church, the Coryphaeus of the choir of the Apostles, the vehement lover of Christ... he who ran throughout the whole world, who fished the whole world; this holy Coryphaeus of the blessed choir; the ardent disciple, who was entrusted with the keys of heaven, who received the spiritual revelation. Peter, the mouth of all Apostles, the head of that company, the ruler of the whole world.</p>
+      <p class="quote-author">— St. John Chrysostom, 387 A.D.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">Rome is called the Apostolic throne. The Chief, Peter.</p>
+      <p class="quote-author">— St. Athanasius, 362 A.D.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">We exhort you in every respect, honorable brother, to heed obediently what has been written by the most blessed pope of the city of Rome, for blessed Peter, who lives and presides in his own see, provides the truth of faith to those who seek it. For we, by reason of our pursuit of peace and faith, cannot try cases on the faith without the consent of the bishop of Rome.</p>
+      <p class="quote-author">— St. Peter Chrysologus, 449 A.D.</p>
+    </div>
+
+    <div class="body-text">
+      <p>The Pope is not infallible in everything he says or does. He is a sinner like all of us. But when he speaks <strong>ex cathedra</strong> — from the chair of Peter — defining a doctrine of faith or morals to be held by the whole Church, he is protected by the Holy Spirit from error. This is not because of his personal holiness, but because of Christ's promise: "The gates of the netherworld shall not prevail against it." The Church cannot formally teach error, because Christ is her head and the Holy Spirit is her soul.</p>
+      <p>We follow the Pope not because he is powerful, but because he is the sign of unity. In a world of fragmentation, confusion, and division, the Pope stands as the visible center of the Church's unity, the guarantor that the faith once delivered to the saints remains intact, the shepherd who calls the scattered sheep back to the one flock.</p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- WHO ARE THE CHURCH FATHERS? -->
+<section class="section" id="fathers">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/www.learner.org/7cb3beac7060c379ce347f9c37f9caea87dd8288.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="section-number">VI</span>
+    <h2 class="section-title">Who are the <em>Church Fathers?</em></h2>
+    <p class="section-subtitle">The witnesses of the apostolic age, the guardians of the deposit of faith, the bridge between the apostles and us.</p>
+
+    <div class="body-text">
+      <p>The Church Fathers are the great Christian writers and teachers of the first eight centuries of the Church — men who lived in the shadow of the apostles, who sat at the feet of those who had seen the risen Lord, and who handed on the apostolic tradition with fidelity, clarity, and often at the cost of their lives.</p>
+      <p>They are called "Fathers" not as a title of honor, but as a description of their role: they are the fathers of the Church in doctrine, in worship, and in discipline. To know the Church Fathers is to know the mind of the early Church. To read them is to hear the echo of the apostolic preaching. To follow them is to walk in the path that the apostles trod.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">So then, brothers and sisters, stand firm and hold fast to the traditions that you were taught, either by an oral statement or by a letter of ours.</p>
+      <p class="scripture-ref">2 Thessalonians 2:15</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> St. Paul commands the Thessalonians to "hold fast to the traditions" — "paradoseis" in Greek, meaning teachings handed down. Notice that Paul distinguishes between two modes of tradition: "oral statement" ("logou") and "letter" ("epistolēs"). The oral tradition is not inferior to the written; both are authoritative. This is the Catholic understanding of Tradition: it is not something added to Scripture, but something that preceded it, produced it, and interprets it. The New Testament itself is a product of Tradition — the Church existed before the New Testament was written, and the Church produced the New Testament under the guidance of the Holy Spirit. The Church Fathers are the living witnesses to this Tradition. When they are unanimous on a point of doctrine, that teaching is considered apostolic and binding. This is why the Catholic Church does not rely on "Scripture alone" (sola scriptura) — Scripture itself commands us to hold fast to the oral traditions as well as the written ones.</p>
+    </div>
+
+    <div class="body-text">
+      <p>The Fathers are divided into the <strong>Apostolic Fathers</strong> — those who knew the apostles personally, such as St. Clement of Rome, St. Ignatius of Antioch, and St. Polycarp — and the <strong>later Fathers</strong>, such as St. Augustine, St. Athanasius, St. Basil, St. Gregory of Nazianzus, St. John Chrysostom, and St. Jerome. These are the great doctors of the Church, the theologians who defended the faith against heresy, who clarified the mysteries of the Trinity and the Incarnation, who established the canon of Scripture, and who shaped the liturgy and sacraments we still celebrate today.</p>
+      <p>Why do we need the Church Fathers? Because the Bible does not interpret itself. The Church existed before the New Testament was written, and the Church produced the New Testament — not the other way around. The Fathers are the living tradition of the Church, the interpretive key that unlocks the meaning of Scripture. When the Fathers are unanimous on a point of doctrine, that teaching is considered apostolic and binding.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">For not as common bread nor common drink do we receive these; but since Jesus Christ our Savior was made incarnate by the word of God and had both flesh and blood for our salvation, so too, as we have been taught, the food which has been made into the Eucharist by the Eucharistic prayer set down by him, and by the change of which our blood and flesh is nourished, is the Flesh and the Blood of that incarnated Jesus.</p>
+      <p class="quote-author">— St. Justin Martyr, First Apology, c. 155 A.D.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">When, therefore, the mixed cup and the baked bread receives the Word of God and becomes the Eucharist, the Body of Christ, and from these the substance of our flesh is increased and supported, how can they say that the flesh is not capable of receiving the gift of God, which is eternal life — flesh which is nourished by the body and blood of the Lord... receiving the Word of God, becomes the Eucharist which is the body and blood of Christ.</p>
+      <p class="quote-author">— St. Irenaeus of Lyons, Against Heresies, c. 180 A.D.</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">This Body, by the indwelling of God the Word, has been made over to divine dignity. Rightly then, do we believe that the bread consecrated by the word of God has been made over into the Body of God the Word.</p>
+      <p class="quote-author">— St. Gregory of Nyssa</p>
+    </div>
+
+    <div class="body-text">
+      <p>The Fathers teach us that the Catholic faith is not a modern invention, not a medieval corruption, not a Renaissance embellishment. It is the faith of the apostles, preserved and handed down through the centuries. The Eucharist, the papacy, the veneration of Mary, the sacraments, the structure of the Church — all of these are found in the writings of the Fathers, often in the very first generations after the apostles.</p>
+      <p>To read the Fathers is to be humbled, instructed, and inspired. They are our elders, our guides, our companions on the quiet pathway to God.</p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- WHY BE CATHOLIC? -->
+<section class="section" id="why">
+  <div class="section-bg" style="background-image: url('https://kimi-web-img.moonshot.cn/img/images.photowall.com/01344c22b541c6092942ef0b5adef1d924c2bf18.jpg')"></div>
+  <div class="section-overlay"></div>
+  <div class="section-content">
+    <span class="section-number">VII</span>
+    <h2 class="section-title">Why Be <em>Catholic?</em></h2>
+    <p class="section-subtitle">The fullness of truth, the fullness of grace, the fullness of life in Jesus Christ.</p>
+
+    <div class="body-text">
+      <p>Why be Catholic? Because the Catholic Church is the Church founded by Jesus Christ. Because she possesses the fullness of the means of salvation. Because she is the guardian of the deposit of faith, the sacrament of unity, the Bride of Christ. Because in her, and in her alone, we find the seven sacraments, the real presence of Christ in the Eucharist, the apostolic succession, the authority to forgive sins, and the promise of Christ's presence until the end of time.</p>
+      <p>The Catholic Church does not claim to be one denomination among many. She claims to be the one Church of Christ, the ark of salvation, the communion of saints. This is not arrogance — it is the confession of faith given to her by her divine Founder. Jesus prayed that His disciples might be one, "that the world may believe." The Catholic Church is the fulfillment of that prayer, the visible unity of all who are in Christ.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">I have told you this so that you might have peace in me. In the world you will have trouble, but take courage, I have conquered the world.</p>
+      <p class="scripture-ref">John 16:33</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> Jesus does not promise His followers a life free from suffering. He promises something far greater: peace <em>in</em> Him, not peace <em>from</em> the world. The Greek "eirēnēn" is the peace of God, the shalom of the Old Testament — not merely the absence of conflict, but the presence of wholeness, harmony, and divine order. The Catholic Church offers this peace through the sacraments, through the Eucharist, through the communion of saints, through the teaching authority that guards the truth. The world offers temporary comfort; the Church offers eternal peace. "Take courage" — "tharsheite" — is an imperative, a command. Courage is not the absence of fear; it is the presence of faith. The Catholic faith gives us the courage to face the world because we know that Christ has already conquered it. The cross is not a defeat; it is a victory disguised as a defeat. The resurrection is the proof that death has been destroyed, sin has been overcome, and the devil has been defeated.</p>
+    </div>
+
+    <div class="body-text">
+      <p>Being Catholic means having access to the <strong>fullness of the sacraments</strong> — Baptism, Confirmation, Eucharist, Penance, Anointing of the Sick, Holy Orders, and Matrimony. Each sacrament is a real encounter with Christ, a channel of grace, a participation in the divine life. The Eucharist is the source and summit; the other sacraments are ordered toward it.</p>
+      <p>Being Catholic means being part of a <strong>universal family</strong> that transcends every boundary of nation, race, language, and culture. The Catholic Church is the most diverse institution in the world, yet she is one in faith, one in worship, one in communion. She is the only institution that can truly claim to be catholic — universal.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">If God is for us, who can be against us?</p>
+      <p class="scripture-ref">Romans 8:31</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">I wish not merely to be called Christian, but also to be Christian.</p>
+      <p class="quote-author">— St. Ignatius of Antioch</p>
+    </div>
+
+    <div class="father-quote reveal">
+      <p class="quote-text">All the darkness in the world cannot extinguish the light of a single candle.</p>
+      <p class="quote-author">— St. Francis of Assisi</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">We know that all things work for good for those who love God, who are called according to his purpose.</p>
+      <p class="scripture-ref">Romans 8:28</p>
+    </div>
+
+    <div class="body-text">
+      <p><strong>Analysis:</strong> This is one of the most comforting and profound verses in the entire Bible. Paul does not say that all things <em>are</em> good — he says that all things <em>work for good</em> for those who love God. Suffering is not good in itself; evil is not good in itself. But God, in His infinite wisdom and power, can bring good out of evil, beauty out of ashes, resurrection out of crucifixion. This is the Catholic hope: not that we will avoid suffering, but that our suffering, united with Christ's suffering, becomes redemptive. The Catholic Church offers the sacraments as the means by which we unite our suffering to Christ's — through the Mass, through Confession, through the Anointing of the Sick. Every trial, every cross, every tear can become a participation in the redemption of the world. This is not a passive resignation; it is an active, faith-filled cooperation with God's grace.</p>
+    </div>
+
+    <div class="body-text">
+      <p>Being Catholic means having the <strong>communion of saints</strong> — the vast cloud of witnesses who have gone before us, who pray for us, who intercede for us, and who encourage us to run the race with perseverance. It means having Mary as our mother, the angels as our guardians, and the saints as our friends and models.</p>
+      <p>Being Catholic means having the <strong>fullness of truth</strong>. The Catholic Church does not teach her own opinions or theories. She teaches the revelation of God, preserved in Scripture and Tradition, interpreted by the Magisterium — the teaching authority of the Pope and the bishops in communion with him. This is not a human authority; it is the authority of Christ, exercised by His chosen ministers.</p>
+      <p>Most of all, being Catholic means being <strong>in love with Jesus Christ</strong>. It means knowing Him, following Him, receiving Him in the Eucharist, and being transformed by His grace into His image. It means walking the quiet pathway that leads from this world to the next, from time to eternity, from the shadows to the light of God's face.</p>
+    </div>
+
+    <div class="scripture-block reveal">
+      <p class="scripture-text">I have the strength for everything through him who empowers me.</p>
+      <p class="scripture-ref">Philippians 4:13</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="body-text" style="text-align: center; margin-top: 2rem;">
+      <p style="font-style: italic; font-size: 1.3rem; color: var(--gold-light);">"Come to me, all you who labor and are burdened, and I will give you rest."</p>
+      <p style="font-size: 0.9rem; color: var(--muted-gold); margin-top: 1rem;">— Matthew 11:28</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-verse">"Your word is a lamp for my feet, a light for my path." — Psalm 119:105</p>
+  <p class="footer-logo">Quiet Pathway</p>
+  <p class="footer-text">An invitation to encounter the beauty, truth, and life of the Catholic Faith.</p>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    const menu = document.getElementById('menu');
+    const navbar = document.getElementById('navbar');
+    menu.classList.toggle('active');
+    navbar.classList.toggle('menu-open');
+  }
+  function closeMenu() {
+    const menu = document.getElementById('menu');
+    const navbar = document.getElementById('navbar');
+    menu.classList.remove('active');
+    navbar.classList.remove('menu-open');
+  }
+
+  // Intersection Observer for reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
